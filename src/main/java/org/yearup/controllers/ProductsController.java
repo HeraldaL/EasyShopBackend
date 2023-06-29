@@ -71,7 +71,7 @@ public class ProductsController {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
             product.setProductId(id);
-            productDao.update( id, product);
+            productDao.update( id, product);//update products
         } catch(Exception ex) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
         }
