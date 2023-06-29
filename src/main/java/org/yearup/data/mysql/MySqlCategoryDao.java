@@ -28,7 +28,7 @@ public class MySqlCategoryDao implements CategoryDao {
     @Override
     public Category getById(int categoryId) {
         String sql = "SELECT * FROM categories WHERE category_id = ?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{categoryId}, this::mapRow); // Modify this line
+        return jdbcTemplate.queryForObject(sql, new Object[]{categoryId}, this::mapRow);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class MySqlCategoryDao implements CategoryDao {
         jdbcTemplate.update(sql, categoryId);
     }
 
-    private Category mapRow(ResultSet row, int rowNum) throws SQLException { // Modify this line
+    private Category mapRow(ResultSet row, int rowNum) throws SQLException {
         int categoryId = row.getInt("category_id");
         String name = row.getString("name");
         String description = row.getString("description");
