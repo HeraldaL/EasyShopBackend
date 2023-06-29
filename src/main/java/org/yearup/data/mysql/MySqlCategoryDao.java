@@ -22,32 +22,53 @@ public class MySqlCategoryDao implements CategoryDao {
     @Override
     public List<Category> getAllCategories() {
         String sql = "SELECT * FROM categories";
-        return jdbcTemplate.query(sql, this::mapRow);
+        try {
+            return jdbcTemplate.query(sql, this::mapRow);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public Category getById(int categoryId) {
         String sql = "SELECT * FROM categories WHERE category_id = ?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{categoryId}, this::mapRow);
+        try {
+            return jdbcTemplate.queryForObject(sql, new Object[]{categoryId}, this::mapRow);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public Category create(Category category) {
         String sql = "INSERT INTO categories (name, description) VALUES (?, ?)";
-        jdbcTemplate.update(sql, category.getName(), category.getDescription());
-        return category;
+        try {
+            jdbcTemplate.update(sql, category.getName(), category.getDescription());
+            return category;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void update(int categoryId, Category category) {
         String sql = "UPDATE categories SET name = ?, description = ? WHERE category_id = ?";
-        jdbcTemplate.update(sql, category.getName(), category.getDescription(), categoryId);
+        try {
+            jdbcTemplate.update(sql, category.getName(), category.getDescription(), categoryId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void delete(int categoryId) {
-        String sql = "DELETE FROM categories WHERE category_id = ?";
-        jdbcTemplate.update(sql, categoryId);
+        String sql = "DELETE FROM categories " +
+                " WHERE category_id = ?";
+        try {
+            jdbcTemplate.update(sql, categoryId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private Category mapRow(ResultSet row, int rowNum) throws SQLException {
