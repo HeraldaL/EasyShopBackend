@@ -13,7 +13,9 @@ import org.yearup.models.Category;
 import org.yearup.models.Product;
 
 import java.util.List;
-
+// add annotation to allow cross site origin requests
+// add the annotation to make this controller the endpoint for the following url
+// http://localhost:8080/categories
 @RestController
 @RequestMapping("categories")
 @CrossOrigin(origins = "*")
@@ -21,13 +23,13 @@ public class CategoriesController {
     private final CategoryDao categoryDao;
     private final ProductDao productDao;
 
-    @Autowired
+    @Autowired // create an Autowired controller to inject the categoryDao and ProductDao
     public CategoriesController(CategoryDao categoryDao, ProductDao productDao) {
         this.categoryDao = categoryDao;
         this.productDao = productDao;
     }
 
-    @GetMapping
+    @GetMapping   // add the appropriate annotation for a get action
     @PreAuthorize("permitAll()")
     public List<Category> getAll() {
 
@@ -35,7 +37,7 @@ public class CategoriesController {
     }
 
 
-    @GetMapping("{id}")
+    @GetMapping("{id}")// add the appropriate annotation for a get action
     public ResponseEntity<Category> getById(@PathVariable int id) {
         Category category = categoryDao.getById(id);
         if (category == null) {
@@ -44,6 +46,8 @@ public class CategoriesController {
         return ResponseEntity.ok(category);
     }
 
+    // the url to return all products in category 1 would look like this
+    // https://localhost:8080/categories/1/products
     @GetMapping("{categoryId}/products")
     @PreAuthorize("permitAll()")
     public List<Product> getProductsById(@PathVariable int categoryId) {
@@ -51,7 +55,8 @@ public class CategoriesController {
         return productDao.listByCategoryId(categoryId);
     }
 
-    @PostMapping
+    @PostMapping // add annotation to call this method for a POST action
+    // add annotation to ensure that only an ADMIN can call this function
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Category addCategory(@RequestBody Category category) {
